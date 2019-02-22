@@ -1,20 +1,30 @@
 <template>
   <div class="single-post-page">
     <section class="post">
-      <h1 class="post-title">Title</h1>
+      <h1 class="post-title">A {{ loadedPosts[1].title }}</h1>
       <div class="post-detail">
         <div class="post-details">
-          Updated on
+          {{loadedPosts[1].updatedDDate}}
         </div>
-        <div class="post-detail">Written by</div>
+        <div class="post-detail">{{loadedPosts[1].author}}</div>
       </div>
-      <p class="post-content">Content</p>
+      <p class="post-content">{{loadedPosts[1].content}}</p>
     </section>
     <section class="post-feedback">
       <p>What you thinking bout <a href="">Tell me</a></p>
     </section>
   </div>
 </template>
+<script>
+export default {
+   computed: {
+    loadedPosts() {
+      return this.$store.getters.loadedPosts
+    }
+  }
+}
+</script>
+
 
 <style scoped>
 .single-post-page {
