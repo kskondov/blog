@@ -5,12 +5,9 @@
 </template>
 
 <script>
-import PostsList from '@/components/posts/PostsList'
 
 export default {
-  components: {
-    PostsList
-  },
+  middleware: 'log',
   computed: {
     loadedPosts() {
       return this.$store.getters.loadedPosts

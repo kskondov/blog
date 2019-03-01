@@ -1,10 +1,10 @@
 <template>
   <div class="single-post-page">
     <section class="post">
-      <h1 class="post-title">A {{ loadedPost.title }}</h1>
+      <h1 class="post-title"> {{ loadedPost.title }}</h1>
       <div class="post-detail">
         <div class="post-details">
-          {{loadedPost.updatedDate}}
+          {{loadedPost.updatedDate | date}}
         </div>
         <div class="post-detail">{{loadedPost.author}}</div>
       </div>
