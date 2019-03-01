@@ -12,7 +12,8 @@ import axios from 'axios'
 
 export default {
   layout: 'admin',
-  middleware: 'auth',
+  // Order is imortant
+  middleware: ['check-auth','auth'],
   components: {
     AdminPostForm
   },
