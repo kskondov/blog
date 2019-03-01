@@ -62,7 +62,8 @@ module.exports = {
     }
   },
   env: {
-    baseUrl: process.env.BASE_URL || 'https://blog-5adfe.firebaseio.com'
+    baseUrl: process.env.BASE_URL || 'https://blog-5adfe.firebaseio.com',
+    fibAPIKey: 'AIzaSyDblK8M8D1uaaR0KoN5uwQ8q4ZL4vk1Ax8'
   }, 
   router: {
     linkActiveClass: 'active',
