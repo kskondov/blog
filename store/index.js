@@ -1,44 +1,58 @@
 import Vuex from 'vuex'
+import axios from 'axios'
 
 const createStore = () => {
   return new Vuex.Store({
     state: {
-      loadedPosts: []
+      loadedPosts: [],
+      post: {}
     },
     mutations: {
       setPosts(state, posts) {
         state.loadedPosts = posts
+      },
+      addPost(state, post) {
+        state.loadedPosts.push(post)
+
+      },
+      editPost(state, editedPost){
+        const postIndex = state.loadedPosts.findIndex(
+          post=>post.id === editedPost.id)
+        state.loadedPosts[postIndex] = editedPost
       }
     },
     actions: {
       nuxtServerInit(vuexContext, context) {
-        return new Promise((resolve, reject) =>{
-          setTimeout(()=>{
-            vuexContext.commit('setPosts', [
-              {
-                id: '1',
-                title: 'Jump',
-                previewText: 'Falling Hell',
-                thumbnail: 'https://ksassets.timeincuk.net/wp/uploads/sites/54/2018/10/uncharted-the-lost-legacy-chloe-frazer-adventure-falling-620x349.jpg'
-              },
-              {
-                id: '2',
-                title: 'Monster',
-                previewText: 'Monstering around',
-                thumbnail: 'https://www.bolsamania.com/cine/wp-content/uploads/2018/05/45-600x450.jpg'
-              },
-              {
-                id: '3',
-                title: 'Big fella',
-                previewText: 'This is one huge mf',
-                thumbnail: 'https://icdn7.digitaltrends.com/image/anthem-everything-we-know-720x720.jpg'
-              }])
-            resolve()
-          },1000)
+        return axios.get(`${process.env.baseUrl}/posts.json`)
+        .then(res=>{
+          const postsArray=[]
+          for (const key in res.data) {
+            postsArray.push({...res.data[key], id:key})
+          }
+          vuexContext.commit('setPosts', postsArray)
         })
+        .catch(e=>context.error(e))
       },
       setPosts(vuexContext, posts) {
         vuexContext.commit('setPosts', posts)
+      },
+      addPost(vuexContext, post){
+        const createdPost =  {...post, updatedDate: new Date()}
+        return axios.post(`${process.env.baseUrl}/posts.json`, 
+        createdPost)
+        .then(res=>{
+          vuexContext.commit('addPost', {...createdPost, id:res.data.name})
+        })
+        .catch(e=>console.log(e))
+      },
+      editPost(vuexContext, editedPost){
+        return axios.put(
+          `https://${process.env.baseUrl}/posts/${editedPost.id}.json`,
+           editedPost)
+           .then(res=>{
+             vuexContext.commit('editPost', editedPost)
+            })
+           .catch(e=>console.log(e))
       }
     },
     getters: {

@@ -1,11 +1,11 @@
 <template>
-  <div class="admi-page">
+  <div class="admin-page">
     <section class="new-post">
       <AppButton @click="$router.push('/admin/new-post')">Create Post</AppButton>
     </section>
     <section class="existing-posts">
       <h1>Exisiting posts</h1>
-      <PostsList isAdmin/>
+      <PostsList isAdmin :posts="loadedPosts"/>
     </section>
   </div> 
 </template>
@@ -19,6 +19,11 @@ export default {
   components: {
     PostsList,
     AppButton
+  },
+  computed: {
+    loadedPosts() {
+      return this.$store.getters.loadedPosts
+    }
   }
 }
 </script>

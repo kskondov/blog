@@ -1,14 +1,14 @@
 <template>
   <div class="single-post-page">
     <section class="post">
-      <h1 class="post-title">A {{ loadedPosts[1].title }}</h1>
+      <h1 class="post-title">A {{ loadedPost.title }}</h1>
       <div class="post-detail">
         <div class="post-details">
-          {{loadedPosts[1].updatedDDate}}
+          {{loadedPost.updatedDate}}
         </div>
-        <div class="post-detail">{{loadedPosts[1].author}}</div>
+        <div class="post-detail">{{loadedPost.author}}</div>
       </div>
-      <p class="post-content">{{loadedPosts[1].content}}</p>
+      <p class="post-content">{{loadedPost.content}}</p>
     </section>
     <section class="post-feedback">
       <p>What you thinking bout <a href="">Tell me</a></p>
@@ -16,11 +16,26 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
-   computed: {
-    loadedPosts() {
-      return this.$store.getters.loadedPosts
-    }
+  // data(){
+  //   return {loadedPost:{}}
+  // },
+  // created() {
+  //   axios.get(`https://blog-5adfe.firebaseio.com/posts/${this.$route.params.id}.json`)
+  //     .then(res=> {
+  //     this.loadedPost = res.data
+  //     console.log(this.$route.params.id)
+  //   })
+  // }
+   asyncData(context) {
+    return axios.get(`${process.env.baseUrl}/posts/${context.params.id }.json`)
+      .then(res => {
+        return {
+          loadedPost: res.data
+        }
+      })
+      .catch(e => context.error(e))
   }
 }
 </script>

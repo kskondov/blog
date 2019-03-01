@@ -1,27 +1,54 @@
 <template>
   <div class="admin-post-page">
     <section class="update-form">
-      <AdminPostForm :post="loadedPost"/>
+      <AdminPostForm :post="loadedPost" @submit="onSubmitted"/>
     </section>
   </div>
 </template>
 
 <script>
 import AdminPostForm from '@/components/admin/AdminPostForm'
+import axios from 'axios'
 
 export default {
   layout: 'admin',
   components: {
     AdminPostForm
   },
-  data() {
-    return {
-      loadedPost: {
-        author: 'Thinko',
-        title: 'GamePost',
-        content: 'Village idiot',
-        thumbnailLink: 'https://www.gamedesigning.org/wp-content/uploads/2017/12/Skyrim-game.jpg'
-      }
+  // data() {
+  //   return {
+  //     loadedPost: {
+  //       author: '',
+  //       title: '',
+  //       content: '',
+  //       thumbnail: ''
+  //     }
+  //   }
+  // },
+  // created() {
+  //   axios.get(`https://blog-5adfe.firebaseio.com/posts/${this.$route.params.postId}.json`)
+  //     .then(res=> {
+  //     this.loadedPost = res.data
+  //   })
+  // },
+   asyncData(context) {
+    return axios
+      .get(
+        `${process.env.baseUrl}/posts/${context.params.postId}.json`
+      )
+      .then(res => {
+        return {
+          loadedPost: { ...res.data, id: context.params.postId }
+        };
+      })
+      .catch(e => context.error());
+  },
+  methods: {
+    onSubmitted(editedPost) {
+      this.$store.dispatch('editPost', editedPost)
+      .then(()=>{
+        this.$router.push('/admin')
+      })
     }
   }
 }

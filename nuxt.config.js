@@ -8,7 +8,7 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: pkg.name,
+    title: 'Game blog',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -52,6 +52,18 @@ module.exports = {
     */
     extend(config, ctx) {
       
+    }
+  },
+  env: {
+    baseUrl: process.env.BASE_URL || 'https://blog-5adfe.firebaseio.com'
+  }, 
+  router: {
+    linkActiveClass: 'active',
+    extendRoutes(routes, resolve ){
+      routes.push({
+        path: '*',
+        component: resolve(__dirname, 'pages/index.vue')
+      })
     }
   }
 }
